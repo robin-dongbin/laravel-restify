@@ -9,10 +9,11 @@ use Binaryk\LaravelRestify\Tests\Fixtures\Post\Post;
 use Binaryk\LaravelRestify\Tests\Fixtures\Post\PostRepository;
 use Binaryk\LaravelRestify\Tests\IntegrationTestCase;
 use Illuminate\Testing\Fluent\AssertableJson;
+use PHPUnit\Framework\Attributes\Test;
 
 class FieldActionTest extends IntegrationTestCase
 {
-    /** * @test */
+    #[Test]
     public function can_use_actionable_field(): void
     {
         $action = new class() extends Action
@@ -52,7 +53,7 @@ class FieldActionTest extends IntegrationTestCase
 
     }
 
-    /** @test */
+    #[Test]
     public function can_use_actionable_field_on_bulk_store(): void
     {
         $action = new class() extends Action
@@ -97,7 +98,7 @@ class FieldActionTest extends IntegrationTestCase
             );
     }
 
-    /** @test */
+    #[Test]
     public function can_use_actionable_field_on_bulk_update(): void
     {
         $action = new class() extends Action
