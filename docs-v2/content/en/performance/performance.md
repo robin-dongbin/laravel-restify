@@ -23,6 +23,18 @@ In order to improve performance, Restify caches the policies. You simply have to
 
 The caching is tight to the current authenticated user so if another user is logged in, the cache will be hydrated for the new user once again.
 
+Restify allows individual caching at the policy level with specific configurations. To enable this, a contract `Cacheable` must be implemented at the policy level, which enforces the use of the `cache()` method.
+
+``` php
+class PostPolicy implements Cacheable
+{
+    public function cache(): ?CarbonInterface
+    {
+        return now()->addMinutes();
+    }
+```
+The `cache` method is expected to return a `CarbonInterface` or `null`. If `null` is returned, the current policy will `NOT` cached.
+
 ## Disable index meta
 
 Index meta are policy information related to what actions are allowed on a resource for a specific user. However, if you don't need this information, you can disable the index meta by setting the `restify.repositories.serialize_index_meta` property to `false` in the `restify.php` configuration file:
