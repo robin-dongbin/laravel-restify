@@ -242,4 +242,30 @@ class AdvancedFilterTest extends IntegrationTestCase
             'filters' => $filters,
         ]))->assertJsonCount(0, 'data');
     }
+
+    public function test_filter_can_be_sent_in_post_requests(): void
+    {
+        Post::factory()->create([
+            'title' => 'Valid post',
+            'description' => 'Zoo bar post',
+        ]);
+
+        Post::factory()->create([
+            'title' => 'Active post',
+            'description' => 'Foo bar post',
+        ]);
+
+        $filters = [
+            [
+                'key' => ValueFilter::uriKey(),
+                'value' => 'Valid%',
+                'operator' => 'like',
+                'column' => 'title',
+            ],
+        ];
+
+        $this->post(PostRepository::route('apply-restify-advanced-filters'), [
+            'filters' => $filters,
+        ])->assertJsonCount(1, 'data');
+    }
 }
