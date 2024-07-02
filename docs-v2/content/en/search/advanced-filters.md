@@ -101,7 +101,7 @@ const filters = [
     }
 ];
 
-const  response = await axios.post(`api/restify/posts/apply-restify-advanced-filters`, filters);
+const  response = await axios.post(`api/restify/posts/apply-restify-advanced-filters`, { filters });
 ```
 
 
@@ -475,7 +475,7 @@ const filters = [
     }
 ];
 
-const response = await axios.post(`api/restify/posts/apply-restify-advanced-filters`, filters);
+const response = await axios.post(`api/restify/posts/apply-restify-advanced-filters`, {filters});
 ```
 
 In this payload, besides the standard key and value, we are also sending operator and column. The operator specifies the type of SQL operation, and the column specifies the database column to filter.
