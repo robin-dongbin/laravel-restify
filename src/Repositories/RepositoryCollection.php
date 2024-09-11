@@ -18,10 +18,10 @@ class RepositoryCollection
             'first' => $paginated['first_page_url'] ?? null,
             'last' => $paginated['last_page_url'] ?? null,
             'prev' => array_key_exists('prev_page_url', $paginated) ? $paginated['prev_page_url'] :
-                collect(collect($paginated['links'])->firstWhere('label', 'Previous'))->get('url')
+                collect(collect($paginated['links'])->firstWhere('label', '&laquo; Previous'))->get('url')
                 ?? null,
-            'next' => array_key_exists('prev_page_url', $paginated) ? $paginated['prev_page_url'] :
-                collect(collect($paginated['links'])->firstWhere('label', 'Previous'))->get('url')
+            'next' => array_key_exists('next_page_url', $paginated) ? $paginated['next_page_url'] :
+                collect(collect($paginated['links'])->firstWhere('label', 'Next &raquo;'))->get('url')
                 ?? null,
         ];
     }
