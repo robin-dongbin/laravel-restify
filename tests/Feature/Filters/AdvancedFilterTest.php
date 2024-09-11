@@ -10,6 +10,7 @@ use Binaryk\LaravelRestify\Tests\Fixtures\Post\InactiveFilter;
 use Binaryk\LaravelRestify\Tests\Fixtures\Post\Post;
 use Binaryk\LaravelRestify\Tests\Fixtures\Post\PostRepository;
 use Binaryk\LaravelRestify\Tests\Fixtures\Post\SelectCategoryFilter;
+use Binaryk\LaravelRestify\Tests\Fixtures\Post\ValueFilter;
 use Binaryk\LaravelRestify\Tests\Fixtures\User\UserRepository;
 use Binaryk\LaravelRestify\Tests\IntegrationTestCase;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -201,5 +202,70 @@ class AdvancedFilterTest extends IntegrationTestCase
                     ->count('data', 1)
                     ->etc()
             );
+    }
+
+    public function test_filter_can_send_meta(): void
+    {
+        Post::factory()->create([
+            'title' => 'Valid post',
+            'description' => 'Zoo bar post',
+        ]);
+
+        Post::factory()->create([
+            'title' => 'Active post',
+            'description' => 'Foo bar post',
+        ]);
+
+        $filters = base64_encode(json_encode([
+            [
+                'key' => ValueFilter::uriKey(),
+                'value' => 'Valid%',
+                'operator' => 'like',
+                'column' => 'title',
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $this->getJson(PostRepository::route(query: [
+            'filters' => $filters,
+        ]))->assertJsonCount(1, 'data');
+
+        $filters = base64_encode(json_encode([
+            [
+                'key' => ValueFilter::uriKey(),
+                'value' => 'Valid%',
+                'operator' => 'like',
+                'column' => 'description',
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $this->getJson(PostRepository::route(query: [
+            'filters' => $filters,
+        ]))->assertJsonCount(0, 'data');
+    }
+
+    public function test_filter_can_be_sent_in_post_requests(): void
+    {
+        Post::factory()->create([
+            'title' => 'Valid post',
+            'description' => 'Zoo bar post',
+        ]);
+
+        Post::factory()->create([
+            'title' => 'Active post',
+            'description' => 'Foo bar post',
+        ]);
+
+        $filters = [
+            [
+                'key' => ValueFilter::uriKey(),
+                'value' => 'Valid%',
+                'operator' => 'like',
+                'column' => 'title',
+            ],
+        ];
+
+        $this->post(PostRepository::route('apply-restify-advanced-filters'), [
+            'filters' => $filters,
+        ])->assertJsonCount(1, 'data');
     }
 }

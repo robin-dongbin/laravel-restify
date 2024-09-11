@@ -82,7 +82,7 @@ class FieldTest extends IntegrationTestCase
         $field->resolveForIndex((object) []);
         $field->resolveForShow((object) []);
         $field->resolve((object) []);
-        $value = $field->serializeToValue(new RestifyRequest());
+        $value = $field->serializeToValue(new RestifyRequest);
 
         $this->assertEquals('Title', data_get($field->jsonSerialize(), 'value'));
         $this->assertEquals('Title', $value['title']);
@@ -96,7 +96,7 @@ class FieldTest extends IntegrationTestCase
             'title' => 'Request value.',
         ]);
 
-        $model = new class() extends Model
+        $model = new class extends Model
         {
             protected $fillable = ['title'];
         };
@@ -115,7 +115,7 @@ class FieldTest extends IntegrationTestCase
     {
         $request = new RepositoryStoreRequest([], []);
 
-        $model = new class() extends Model
+        $model = new class extends Model
         {
             protected $fillable = ['title'];
         };
@@ -137,7 +137,7 @@ class FieldTest extends IntegrationTestCase
             'title' => 'Request title.',
         ]);
 
-        $model = new class() extends Model
+        $model = new class extends Model
         {
             protected $fillable = ['title'];
         };
@@ -155,7 +155,7 @@ class FieldTest extends IntegrationTestCase
     {
         $request = new RepositoryStoreRequest([], []);
 
-        $model = new class() extends Model
+        $model = new class extends Model
         {
             protected $fillable = ['title'];
         };
@@ -165,7 +165,7 @@ class FieldTest extends IntegrationTestCase
             ->value(function () {
                 return 'from append callback';
             })
-            ->fillCallback(new InvokableFill())
+            ->fillCallback(new InvokableFill)
             ->storeCallback(function () {
                 return 'from store callback';
             })
@@ -183,8 +183,7 @@ class FieldTest extends IntegrationTestCase
         $request = new RepositoryStoreRequest([], []);
 
         $request->setRouteResolver(function () use ($request) {
-            return tap(new Route('POST', '/{repository}', function () {
-            }), function (Route $route) use ($request) {
+            return tap(new Route('POST', '/{repository}', function () {}), function (Route $route) use ($request) {
                 $route->bind($request);
                 $route->setParameter('repository', PostRepository::uriKey());
             });
@@ -194,7 +193,7 @@ class FieldTest extends IntegrationTestCase
             'title' => 'title from request',
         ]);
 
-        $model = new class() extends Model
+        $model = new class extends Model
         {
             protected $fillable = ['title'];
         };
@@ -212,8 +211,7 @@ class FieldTest extends IntegrationTestCase
         $request = new RepositoryStoreRequest([], []);
 
         $request->setRouteResolver(function () use ($request) {
-            return tap(new Route('POST', '/{repository}', function () {
-            }), function (Route $route) use ($request) {
+            return tap(new Route('POST', '/{repository}', function () {}), function (Route $route) use ($request) {
                 $route->bind($request);
                 $route->setParameter('repository', PostRepository::uriKey());
             });
@@ -223,7 +221,7 @@ class FieldTest extends IntegrationTestCase
             'title' => 'title from request',
         ]);
 
-        $model = new class() extends Model
+        $model = new class extends Model
         {
             protected $fillable = ['title'];
         };
@@ -241,8 +239,7 @@ class FieldTest extends IntegrationTestCase
         $request = new RepositoryStoreRequest([], []);
 
         $request->setRouteResolver(function () use ($request) {
-            return tap(new Route('POST', '/{repository}', function () {
-            }), function (Route $route) use ($request) {
+            return tap(new Route('POST', '/{repository}', function () {}), function (Route $route) use ($request) {
                 $route->bind($request);
                 $route->setParameter('repository', PostRepository::uriKey());
             });
@@ -252,7 +249,7 @@ class FieldTest extends IntegrationTestCase
             'title' => 'After store title',
         ]);
 
-        $model = new class() extends Model
+        $model = new class extends Model
         {
             protected $table = 'posts';
 
@@ -260,7 +257,7 @@ class FieldTest extends IntegrationTestCase
         };
 
         /** * @var Field $field */
-        $field = Field::new('title')->afterStore(new InvokableAfterStore());
+        $field = Field::new('title')->afterStore(new InvokableAfterStore);
 
         $field->fillAttribute($request, $model);
 
@@ -271,7 +268,7 @@ class FieldTest extends IntegrationTestCase
 
     public function test_field_after_update_called()
     {
-        $model = new class() extends Model
+        $model = new class extends Model
         {
             protected $table = 'posts';
 
@@ -284,8 +281,7 @@ class FieldTest extends IntegrationTestCase
         $request = new RepositoryUpdateRequest([], []);
 
         $request->setRouteResolver(function () use ($request, $model) {
-            return tap(new Route('PUT', "/{repository}/{$model->id}", function () {
-            }), function (Route $route) use ($request) {
+            return tap(new Route('PUT', "/{repository}/{$model->id}", function () {}), function (Route $route) use ($request) {
                 $route->bind($request);
                 $route->setParameter('repository', PostRepository::uriKey());
             });
@@ -324,8 +320,7 @@ class FieldTest extends IntegrationTestCase
         $request = new RepositoryStoreRequest([], []);
 
         $request->setRouteResolver(function () use ($request) {
-            return tap(new Route('POST', '/{repository}', function () {
-            }), function (Route $route) use ($request) {
+            return tap(new Route('POST', '/{repository}', function () {}), function (Route $route) use ($request) {
                 $route->bind($request);
                 $route->setParameter('repository', PostRepository::uriKey());
             });
@@ -335,7 +330,7 @@ class FieldTest extends IntegrationTestCase
             'custom_title' => 'title from request',
         ]);
 
-        $model = new class() extends Model
+        $model = new class extends Model
         {
             protected $fillable = ['title'];
         };
@@ -356,7 +351,7 @@ class FieldTest extends IntegrationTestCase
             'title' => 'Title from the request.',
         ]);
 
-        $model = new class() extends Model
+        $model = new class extends Model
         {
             protected $table = 'posts';
 
@@ -388,7 +383,7 @@ class FieldTest extends IntegrationTestCase
             'title' => 'Title from the request.',
         ]);
 
-        $model = new class() extends Model
+        $model = new class extends Model
         {
             protected $table = 'posts';
 

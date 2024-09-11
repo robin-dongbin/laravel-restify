@@ -113,7 +113,7 @@ public function getters(RestifyRequest $request): array
 {
     return [
         StripeInformationGetter::new()->canSee(function (Request $request) {
-            return $request->user()->can('seeStripeInfo),
+            return $request->user()->can('seeStripeInfo'),
         }),
     ];
 }

@@ -210,7 +210,7 @@ class RepositorySearchService
                 $repository,
                 AdvancedFiltersCollection::collectQueryFilters($request, $repository)
                     ->apply($request, $query),
-                $request->input('filters'),
+                $request->filters(),
             )
         );
 
@@ -219,6 +219,6 @@ class RepositorySearchService
 
     public static function make(): static
     {
-        return new static();
+        return new static;
     }
 }

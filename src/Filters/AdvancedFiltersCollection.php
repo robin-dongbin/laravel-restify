@@ -26,11 +26,9 @@ class AdvancedFiltersCollection extends Collection
 
     public static function collectQueryFilters(RestifyRequest $request, Repository $repository): self
     {
-        if (! $request->input('filters')) {
+        if (! $filters = $request->filters()) {
             return static::make([]);
         }
-
-        $filters = json_decode(base64_decode($request->input('filters')), true);
 
         $allowedFilters = $repository->collectAdvancedFilters($request);
 
@@ -47,10 +45,17 @@ class AdvancedFiltersCollection extends Collection
 
                 $advancedFilter = clone $advancedFilter;
 
+                $key = data_get($queryFilter, 'key');
+                $value = data_get($queryFilter, 'value');
+                unset($queryFilter['key'], $queryFilter['value']);
+
                 return $advancedFilter->resolve($request, $dto = new AdvancedFilterPayloadDataObject(
-                    key: data_get($queryFilter, 'key'),
-                    value: data_get($queryFilter, 'value'),
-                ))->validatePayload($request, $dto);
+                    $key,
+                    $value,
+                    $queryFilter,
+                ))
+                    ->withMeta($queryFilter['meta'] ?? [])
+                    ->validatePayload($request, $dto);
             })
             ->filter();
     }
