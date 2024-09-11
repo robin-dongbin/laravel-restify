@@ -90,8 +90,7 @@ trait InteractWithRepositories
 
     public function modelQuery(?string $repositoryId = null, ?string $uriKey = null): Builder|Relation
     {
-        return $this->newQuery($uriKey)->where(
-            $this->model()->getRouteKeyName(),
+        return $this->newQuery($uriKey)->whereKey(
             $repositoryId ?? $this->route('repositoryId')
         );
     }
